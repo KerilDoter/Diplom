@@ -16,7 +16,7 @@ class PostController extends Controller {
         // показывается форма для записи
         return view('create');
     }
-    public function store(Request $request)
+    public function storeAll(Request $request)
     {
         // сохраняются данные в модель и редирект на страницу со всеми постами
 
@@ -25,7 +25,25 @@ class PostController extends Controller {
         $card->cardImage       = $request->input('cardImage');
         $card->cardDescription = $request->input('cardDescription');
         $card->save();
+        $request->validate([
+            'cardName' => 'required',
+            // Добавьте другие правила валидации
+        ]);
         return redirect()->route('index');
+
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'cardName' => 'required',
+            // Добавьте другие правила валидации, если необходимо
+        ]);
+
+        $card = new Post();
+        $card->cardName = $request->input('cardName');
+        // Добавьте другие поля, если они присутствуют
+        $card->save();
+        return response()->json(['message' => 'Data saved successfully'], 200);
     }
 
 }

@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/', 'App\Http\Controllers\PostController@index')->name('todoIndex'); // показывает все записи
+Route::post('/', 'App\Http\Controllers\PostController@store')->name('todo.store'); // сохраняет данные

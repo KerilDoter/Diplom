@@ -19,11 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://127.0.0.1:3000'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Content-Type', 'X-Requested-With', 'x-csrf-token'],
 
     'exposed_headers' => [],
 
@@ -32,3 +32,4 @@ return [
     'supports_credentials' => false,
 
 ];
+
