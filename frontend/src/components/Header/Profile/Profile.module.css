@@ -1,0 +1,43 @@
+.profileIcon{
+    width: 48px;
+    height: 48px;
+    background-color: #c95948;
+    border-radius: 50%;
+}
+.ava{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.profile{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.arrow{
+    cursor: pointer;
+}
+.list{
+    position: absolute;
+    top: 40px;
+    right: 0;
+    list-style: none;
+}
+.item{
+    border: 1px solid #111;
+    width: 100px;
+    padding: 4px;
+    text-align: right;
+    margin: 1px;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: aliceblue;
+}
+.item:hover{
+    background-color: bisque;
+}
+.btn{
+    width: 16px;
+    height: 16px;
+}
