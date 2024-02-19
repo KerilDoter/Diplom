@@ -26,6 +26,7 @@ export const Form = () => {
                 body: JSON.stringify(formData),
             });
 
+
             if (response.ok) {
                 console.log('Data sent successfully!');
             } else {

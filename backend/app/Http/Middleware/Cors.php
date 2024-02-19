@@ -28,7 +28,7 @@ class Cors
         */
         $response = $next($request);
 
-        $response->header('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
+        $response->header('Access-Control-Allow-Origin', 'http://localhost:3000');
         $response->header('Access-Control-Allow-Headers', 'Content-Type, x-csrf-token');
 
         return $response;
