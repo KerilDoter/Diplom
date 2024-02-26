@@ -1,12 +1,11 @@
 .profileIcon{
-    width: 48px;
-    height: 48px;
-    background-color: #c95948;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
 }
 .ava{
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -25,17 +24,18 @@
     list-style: none;
 }
 .item{
-    border: 1px solid #111;
+    border: 1px solid #27832F;
     width: 100px;
-    padding: 4px;
+    padding: 8px;
     text-align: right;
-    margin: 1px;
+    margin: 2px;
     cursor: pointer;
     border-radius: 6px;
-    background-color: aliceblue;
+    background-color: #fff;
 }
 .item:hover{
-    background-color: bisque;
+    background-color: #27832F;
+    color: #fff;
 }
 .btn{
     width: 16px;

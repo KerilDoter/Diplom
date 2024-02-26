@@ -11,16 +11,16 @@ export const Profile = () => {
 
     return <div>
         <div className={styles.profile}>
-            <a href="">
-                <div className={styles.profileIcon}>
+            <a href="#">
+                <div className={styles.profileIcon} onClick={toggleVisibility}>
                     <img className={styles.ava} src={ava} alt="Avatar"/>
                 </div>
             </a>
-            <div>
-                <a onClick={toggleVisibility} className={styles.btn}>
-                    <img className={styles.arrow} src={arrowDown} alt="arrowDown"/>
-                </a>
-            </div>
+            {/*<div>*/}
+            {/*    <a onClick={toggleVisibility} className={styles.btn}>*/}
+            {/*        <img className={styles.arrow} src={arrowDown} alt="arrowDown"/>*/}
+            {/*    </a>*/}
+            {/*</div>*/}
             {isVisible && <ul className={styles.list}>
                 <li className={styles.item}>item 1</li>
                 <li className={styles.item}>item 2</li>

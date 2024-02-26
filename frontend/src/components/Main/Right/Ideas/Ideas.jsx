@@ -12,7 +12,7 @@ export const Ideas = () => {
     }
     return <div>
         <div onClick={toggleVisible} className={styles.heading}>
-            <h2>Ideas</h2>
+            <h2 className={styles.h2}>Идеи</h2>
         </div>
         {isVisible && <ul className={styles.list}>
             {listIdeas}

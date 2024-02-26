@@ -1,14 +1,5 @@
 .form {
-    width: 300px;
-    display: flex;
-    align-items: center;
-}
-.input, .btn {
-    border: none;
-    outline: none;
-}
-.input {
-    width: 100%;
+    width: 256px;
     height: 42px;
     background: #3CC948;
     border-radius: 8px;
@@ -17,22 +8,25 @@
     color: #fff;
     padding: 2px 56px 2px 12px;
     border: 1px solid #27832F;
+    margin: 0 24px 0 0;
 }
-.input::placeholder{
+.form::placeholder{
     color: #fff;
     opacity: .9;
 }
-.btn {
-    height: 26px;
-    width: 36px;
+.btn{
+    height: 42px;
     background: #27832F;
     cursor: pointer;
     border-radius: 6px;
-    margin-left: -48px;
+    color: #fff;
+    padding: 4px 8px;
+    border: 1px solid #fff;
+    font-weight: bold;
+    font-size: 16px;
 }
 .btn:hover{
-    opacity: .9;
-}
-.btn svg{
-    fill: #fff;
+    color: #27832F;
+    background: #fff;
+    border: 1px solid #27832F;
 }
