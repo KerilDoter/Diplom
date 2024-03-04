@@ -35,15 +35,26 @@ class PostController extends Controller {
     {
         $request->validate([
             'cardName' => 'required',
-            
+
         ]);
 
-        $card = new Post();
+        $card           = new Post();
         $card->cardName = $request->input('cardName');
         // Добавьте другие поля, если они присутствуют
         $card->save();
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
 
+    // для конкретного поста
+    public function show($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        return response()->json($post, 200);
+    }
 }
 

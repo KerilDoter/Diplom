@@ -21,4 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/', 'App\Http\Controllers\PostController@index')->name('todoIndex'); // показывает все записи
 Route::post('/', 'App\Http\Controllers\PostController@store')->name('todo.store'); // сохраняет данные
-
+Route::get('/post/{id}','App\Http\Controllers\PostController@show'); // показывает конкретный пост
