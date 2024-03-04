@@ -27,7 +27,6 @@ class PostController extends Controller {
         $card->save();
         $request->validate([
             'cardName' => 'required',
-            // Добавьте другие правила валидации
         ]);
         return redirect()->route('index');
 
@@ -36,7 +35,7 @@ class PostController extends Controller {
     {
         $request->validate([
             'cardName' => 'required',
-            // Добавьте другие правила валидации, если необходимо
+            
         ]);
 
         $card = new Post();

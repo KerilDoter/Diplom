@@ -9,8 +9,5 @@
 </head>
 <body>
     <h1>Главная страница</h1>
-    @foreach({{ $card in $cards }})
-
-    @endforeach
 </body>
 </html>
