@@ -56,5 +56,33 @@ class PostController extends Controller {
 
         return response()->json($post, 200);
     }
+
+    // количество постов
+    public function getPostCount()
+    {
+        $posts = Post::count();
+
+        if($posts=== 0) {
+            return response()->json(['posts' => 0]);
+        }
+
+        return response()->json(['posts' => $posts]);
+    }
+
+    // количество постов со статусом на модерации
+    public function getPostsInModeration()
+    {
+        $postsInModerationCount = Post::where('status', 'на модерации')->count();
+
+        return response()->json(['posts_in_moderation' => $postsInModerationCount]);
+    }
+
+    // количество постов со статусом готово
+    public function getReadyPosts()
+    {
+        $readyPostsCount = Post::where('status', 'готово')->count();
+
+        return response()->json(['ready_posts' => $readyPostsCount]);
+    }
 }
 
