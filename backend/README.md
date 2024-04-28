@@ -64,3 +64,130 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Контроллеры Постов
+## Посты
+Первая версия:
+id
+cardName
+cardImage
+cardDescription
+created_at
+updated_at
+
+Вторая версия:
+id
+author_id (связь с автором)
+title (заголовок)
+description (превью статьи)
+content (контент статьи)
+category_id (связь с категориями)
+attachment_id (связь с вложенными файлами)
+status_id (связь со статусом)
+!!!view (количество просмотров поста)
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать миграцию
+Команды:
+Создание модели и миграции: `php artisan make:model Post -m` !!! Уже есть
+## Статус постов [status]
+id
+status
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+Команды:
+Создание модели и миграции: `php artisan make:model Status -m`
+## Категории постов [category]
+id
+category
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+Команды:
+Создание модели и миграции: `php artisan make:model Category -m`
+
+Миграции:
+
+## Вложения [attachments]
+id
+file (адрес до файла или целиком файл)
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+# Контроллеры пользователей
+## Пользователи
+id
+surname
+name
+patronymic (отчество)
+кафедра (если преподаватель)
+должность (если преподаватель)
+phone (телефон)
+workPhone (рабочий номер телефона)
+email
+telegram
+vk
+login
+password
+idRule (связь с таблицей роли / студент, преподаватель, модератор)
+isAdmin (bool)
+about (о себе)
+idInteresting (связь с таблицей интересы / наверное скиллы)
+group (для студента / группа по типу ПИ0000)
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+
+## rules (роли)
+id 
+name_rule
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+
+## интересы
+id 
+name_interesting
+created_at (когда создано)
+updated_at (когда обновлено)
+
+Todo: надо создать модель, контроллер, миграцию
+
+# Связи
+Пост может принадлежать к какой-то категории
+Категория может иметь много постов
+
+## команды
+Создание миграции для связи таблиц Post, Status и Category:
+### Post
+Там где связь с другой таблицей 
+`$table -> integet('category_id)')->unsigned();`
+### Post и Category
+`php artisan make:migration create_post_status_table`
+В миграции писать:
+в методе up()
+`$table->id();`
+`$table->integer('category_id')->unsigned();`
+`$table->integer('post_id')->unsigned();`
+`$table->timestamps();`
+Поле таблицы постов ссылается на поле таблицы категорий, а в таблице
+категорий ссылается на таблицу постов
+
+
+
+
+
+
+
+
+
+
+
+
