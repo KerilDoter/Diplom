@@ -8,8 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-<form action="/" method="post">
-    @csrf
-</form>
+<h1>Страница с созданием поста</h1>
 </body>
 </html>

@@ -12,17 +12,34 @@
     <form action="{{ route('post.update', $post->id) }}" method="post">
         @csrf
         @method('PUT')
-        <label for="cardName">
+        <label for="title">
             Название поста
-            <input type="text" name="cardName" id="cardName" value="{{ $post->cardName }}">
+            <input type="text" name="title" id="title" value="{{ $post->title }}">
         </label>
-        <label for="cardImage">
-            Изображение
-            <input type="text" name="cardImage" id="cardImage" value="{{ $post->cardImage }}">
+
+        <label for="description">
+            Краткая информация
+            <input type="text" name="description" id="description" value="{{ $post->description }}">
         </label>
-        <label for="cardDescription">
-            Дополнительная информация
-            <input type="text" name="cardDescription" id="cardDescription" value="{{ $post->cardDescription }}">
+
+        <label for="content">
+            Содержание
+            <input type="text" name="content" id="content" value="{{ $post->content }}">
+        </label>
+
+        <label for="category_id">
+            Выберите категорию
+            <input type="text" name="category_id" id="category_id" value="{{ $post->category_id }}">
+        </label>
+
+        <label for="attachment_id">
+            Добавьте дополнительные файлы
+            <input type="text" name="attachment_id" id="attachment_id" value="{{ $post->attachment_id }}">
+        </label>
+
+        <label for="status_id">
+            Выберите статус поста
+            <input type="text" name="status_id" id="status_id" value="{{ $post->status_id }}">
         </label>
         <input type="submit" value="Изменить">
     </form>

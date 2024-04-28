@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('cardName');
-            $table->string('cardImage');
-            $table->string('cardDescription');
+            $table->string('title');
+            $table->string('description');
+            $table->string('content');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('attachment_id')->nullable();
+            $table->unsignedBigInteger('status_id');
             $table->timestamps();
         });
     }

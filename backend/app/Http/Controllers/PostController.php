@@ -17,16 +17,24 @@ class PostController extends Controller {
     public function store(Request $request)
     {
         // сохраняются данные в модель и редирект на страницу со всеми постами
-        $card                  = new Post();
-        $card->cardName        = $request->input('cardName');
-        $card->cardImage       = $request->input('cardImage');
-        $card->cardDescription = $request->input('cardDescription');
+        $card               = new Post();
+        //$card->cardName        = $request->input('cardName');
+        //$card->cardImage       = $request->input('cardImage');
+        //$card->cardDescription = $request->input('cardDescription');
+        // для старой миграции
+
+        $card->title         = $request->input('title');
+        $card->description   = $request->input('description');
+        $card->content       = $request->input('content');
+        $card->category_id   = $request->input('category_id');
+        $card->attachment_id = $request->input('attachment_id');
+        $card->status_id     = $request->input('status_id');
         $card->save();
         $request->validate([
-            'cardName' => 'required',
+            'title' => 'required',
         ]);
-        return redirect()->back();
-
+        //return redirect()->back();
+        return redirect()->route('post.all');
 
     }
     public function delete($id) {
@@ -47,12 +55,20 @@ class PostController extends Controller {
         // записываем все данные и переходим на главную страницу
 
         $post                  = Post::find($id);
-        $post->cardName        = $request->input('cardName');
-        $post->cardImage       = $request->input('cardImage');
-        $post->cardDescription = $request->input('cardDescription');
+        //$post->cardName        = $request->input('cardName');
+        //$post->cardImage       = $request->input('cardImage');
+        //$post->cardDescription = $request->input('cardDescription');
+        // для старой миграции
+
+        $post->title         = $request->input('title');
+        $post->description   = $request->input('description');
+        $post->content       = $request->input('content');
+        $post->category_id   = $request->input('category_id');
+        $post->attachment_id = $request->input('attachment_id');
+        $post->status_id     = $request->input('status_id');
         $post->save();
         $request->validate([
-            'cardName' => 'required',
+            'title' => 'required',
         ]);
         return redirect()->route('post.all');
     }
