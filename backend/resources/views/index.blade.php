@@ -66,6 +66,36 @@
 
 
 -->
+        <hr>
+    </section>
+    <section class="category">
+        <a href="{{ route('categoryIndex')}}">Создать категорию</a>
+        @foreach($categories as $category)
+            <p>Название категории: {{ $category->title }}</p>
+            <!-- Кнопка для удаления записи -->
+            <form action="{{ route('category.delete', $category->id) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Удалить</button>
+            </form>
+            <a href="{{ route('category.edit', $category->id) }}">Изменить</a>
+        @endforeach
+        <hr>
+    </section>
+
+    <section class="statuses">
+        <a href="{{ route('statusIndex')}}">Создать статус</a>
+        @foreach($statuses as $status)
+            <p>Название статуса: {{ $status->title }}</p>
+            <!-- Кнопка для удаления записи -->
+            <form action="{{ route('status.delete', $status->id) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <button type="submit">Удалить</button>
+            </form>
+            <a href="{{ route('status.edit', $status->id) }}">Изменить</a>
+        @endforeach
+        <hr>
     </section>
 </body>
 </html>

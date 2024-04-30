@@ -27,3 +27,9 @@ Route::put('/posts/{id}', 'App\Http\Controllers\PostController@update')->name('p
 
 
 Route::get('/count', 'App\Http\Controllers\PostController@getPostCount'); // показывает количество записей
+// апи категорий
+Route::get('/category', 'App\Http\Controllers\CategoryController@CategoryAllToJSON')->name('CategoryAllToJSON'); // показывает все записи
+Route::post('/category', 'App\Http\Controllers\CategoryController@store')->name('category.store'); // сохраняет данные
+Route::get('/category/{id}','App\Http\Controllers\CategoryController@show'); // показывает конкретный пост
+Route::delete('/category/{id}', 'App\Http\Controllers\CategoryController@delete')->name('category.delete'); // удаление поста
+Route::put('/category/{id}', 'App\Http\Controllers\CategoryController@update')->name('category.update'); // обновление поста

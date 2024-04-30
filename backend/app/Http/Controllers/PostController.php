@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\Status;
 use Illuminate\Http\Request;
 class PostController extends Controller {
     public function index(Request $request)
@@ -10,8 +12,15 @@ class PostController extends Controller {
     }
     public function all(Request $request) {
         // показ всех записей
-        $posts = Post::all();
-        return view('index', ['posts' => $posts]);
+        $posts      = Post::all();
+        $categories = Category::all();
+        $statuses   = Status::all();
+        return view('index',
+            [
+                'posts' => $posts,
+                'categories'=> $categories,
+                'statuses' => $statuses,
+            ]);
     }
 
     public function store(Request $request)
