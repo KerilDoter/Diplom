@@ -3,35 +3,43 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Status;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 class PostController extends Controller {
     public function index(Request $request)
     {
+        $posts      = Post::all();
+        //$categories = Category::pluck('title', 'id')->all();
+        //$statuses   = Status::pluck('title', 'id')->all();
         // показывается главная страница
-        return view('index');
+        return view('index', compact('posts'));
     }
+    public function create() {
+        $posts      = Post::all();
+        $categories = Category::pluck('title', 'id')->all();
+        $statuses   = Status::pluck('title', 'id')->all();
+        return view('create', compact('categories', 'statuses', 'posts'));
+    }
+    /*
     public function all(Request $request) {
         // показ всех записей
         $posts      = Post::all();
-        $categories = Category::all();
+        //$categories = Category::all();
         $statuses   = Status::all();
+        $tags       = Tag::all();
         return view('index',
             [
                 'posts' => $posts,
-                'categories'=> $categories,
+                //'categories'=> $categories,
                 'statuses' => $statuses,
+                'tags' => $tags,
             ]);
     }
-
+*/
     public function store(Request $request)
     {
         // сохраняются данные в модель и редирект на страницу со всеми постами
-        $card               = new Post();
-        //$card->cardName        = $request->input('cardName');
-        //$card->cardImage       = $request->input('cardImage');
-        //$card->cardDescription = $request->input('cardDescription');
-        // для старой миграции
-
+        $card                = new Post();
         $card->title         = $request->input('title');
         $card->description   = $request->input('description');
         $card->content       = $request->input('content');
@@ -43,7 +51,7 @@ class PostController extends Controller {
             'title' => 'required',
         ]);
         //return redirect()->back();
-        return redirect()->route('post.all');
+        return redirect()->route('post.index');
 
     }
     public function delete($id) {
@@ -63,12 +71,7 @@ class PostController extends Controller {
         // со страницы edit на контроллер отправляется id поста и его данные
         // записываем все данные и переходим на главную страницу
 
-        $post                  = Post::find($id);
-        //$post->cardName        = $request->input('cardName');
-        //$post->cardImage       = $request->input('cardImage');
-        //$post->cardDescription = $request->input('cardDescription');
-        // для старой миграции
-
+        $post                = Post::find($id);
         $post->title         = $request->input('title');
         $post->description   = $request->input('description');
         $post->content       = $request->input('content');
@@ -79,7 +82,7 @@ class PostController extends Controller {
         $request->validate([
             'title' => 'required',
         ]);
-        return redirect()->route('post.all');
+        return redirect()->route('post.index');
     }
     // API
     public function PostAllToJSON(Request $request) {

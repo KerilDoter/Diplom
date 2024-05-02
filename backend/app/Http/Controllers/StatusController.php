@@ -3,9 +3,13 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use Illuminate\Http\Request;
 class StatusController extends Controller {
-    public function statusIndex(Request $request)
+    public function index(Request $request)
     {
-        // страница с созданием категории
+        $statuses = Status::all();
+        return view('statuses.index', compact('statuses'));
+    }
+    public function create(Request $request)
+    {
         return view('statuses.create');
     }
     public function store(Request $request)
@@ -17,7 +21,7 @@ class StatusController extends Controller {
         $request->validate([
             'title' => 'required',
         ]);
-        return redirect()->route('post.all');
+        return redirect()->route('status.index');
 
     }
     public function delete($id) {
@@ -37,7 +41,7 @@ class StatusController extends Controller {
         $request->validate([
             'title' => 'required',
         ]);
-        return redirect()->route('post.all');
+        return redirect()->route('status.index');
     }
     // API
     public function StatusAllToJSON(Request $request) {

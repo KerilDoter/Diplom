@@ -31,7 +31,6 @@
             Выберите категорию
             <input type="text" name="category_id" id="category_id" value="{{ $post->category_id }}">
         </label>
-
         <label for="attachment_id">
             Добавьте дополнительные файлы
             <input type="text" name="attachment_id" id="attachment_id" value="{{ $post->attachment_id }}">

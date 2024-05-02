@@ -33,3 +33,18 @@ Route::post('/category', 'App\Http\Controllers\CategoryController@store')->name(
 Route::get('/category/{id}','App\Http\Controllers\CategoryController@show'); // показывает конкретный пост
 Route::delete('/category/{id}', 'App\Http\Controllers\CategoryController@delete')->name('category.delete'); // удаление поста
 Route::put('/category/{id}', 'App\Http\Controllers\CategoryController@update')->name('category.update'); // обновление поста
+
+
+// апи статусов
+Route::get('/status', 'App\Http\Controllers\StatusController@StatusAllToJSON')->name('StatusAllToJSON'); // показывает все записи
+Route::post('/status', 'App\Http\Controllers\StatusController@store')->name('status.store'); // сохраняет данные
+Route::get('/status/{id}','App\Http\Controllers\StatusController@show'); // показывает конкретный пост
+Route::delete('/status/{id}', 'App\Http\Controllers\StatusController@delete')->name('status.delete'); // удаление поста
+Route::put('/status/{id}', 'App\Http\Controllers\StatusController@update')->name('status.update'); // обновление поста
+
+// апи тегов
+Route::get('/tag', 'App\Http\Controllers\TagController@TagAllToJSON')->name('TagAllToJSON'); // показывает все записи
+Route::post('/tag', 'App\Http\Controllers\TagController@store')->name('tag.store'); // сохраняет данные
+Route::get('/tag/{id}','App\Http\Controllers\TagController@show'); // показывает конкретный пост
+Route::delete('/tag/{id}', 'App\Http\Controllers\TagController@delete')->name('tag.delete'); // удаление поста
+Route::put('/tag/{id}', 'App\Http\Controllers\TagController@update')->name('tag.update'); // обновление поста

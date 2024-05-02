@@ -13,46 +13,14 @@
         <h2>Посты</h2>
         <p>Создание поста</p>
         <p>Все посты</p>
-        <form action=" {{ route('post.store') }}" method="post">
-            @csrf
-            <label for="title">
-                Название поста
-                <input type="text" name="title" id="title" value="">
-            </label>
-
-            <label for="description">
-                Краткая информация
-                <input type="text" name="description" id="description" value="">
-            </label>
-
-            <label for="content">
-                Содержание
-                <input type="text" name="content" id="content" value="">
-            </label>
-
-            <label for="category_id">
-                Выберите категорию
-                <input type="text" name="category_id" id="category_id" value="">
-            </label>
-
-            <label for="attachment_id">
-                Добавьте дополнительные файлы
-                <input type="text" name="attachment_id" id="attachment_id" value="">
-            </label>
-
-            <label for="status_id">
-                Выберите статус поста
-                <input type="text" name="status_id" id="status_id" value="">
-            </label>
-            <input type="submit" value="создать">
-        </form>
+        <a href=" {{route('post.create')}}">Создать пост</a>
         @foreach($posts as $post)
             <p>Название поста: {{ $post->title }}</p>
             <p>Краткое описание поста: {{ $post->description }}</p>
             <p>Основное содержание: {{ $post->content }}</p>
-            <p>Категория: {{ $post->category_id }}</p>
+            <p>Категория: {{ $post->category->title }}</p>
             <p>Вложения: {{ $post->attachment_id }}</p>
-            <p>Статус: {{ $post->status_id }}</p>
+            <p>Статус: {{ $post->status->title}}</p>
             <!-- Кнопка для удаления записи -->
             <form action="{{ route('post.delete', $post->id) }}" method="post">
                 @csrf
@@ -60,40 +28,6 @@
                 <button type="submit">Удалить</button>
             </form>
             <a href="{{ route('post.edit', $post->id) }}">Изменить</a>
-        @endforeach
-
-<!--
-
-
--->
-        <hr>
-    </section>
-    <section class="category">
-        <a href="{{ route('categoryIndex')}}">Создать категорию</a>
-        @foreach($categories as $category)
-            <p>Название категории: {{ $category->title }}</p>
-            <!-- Кнопка для удаления записи -->
-            <form action="{{ route('category.delete', $category->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Удалить</button>
-            </form>
-            <a href="{{ route('category.edit', $category->id) }}">Изменить</a>
-        @endforeach
-        <hr>
-    </section>
-
-    <section class="statuses">
-        <a href="{{ route('statusIndex')}}">Создать статус</a>
-        @foreach($statuses as $status)
-            <p>Название статуса: {{ $status->title }}</p>
-            <!-- Кнопка для удаления записи -->
-            <form action="{{ route('status.delete', $status->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Удалить</button>
-            </form>
-            <a href="{{ route('status.edit', $status->id) }}">Изменить</a>
         @endforeach
         <hr>
     </section>
