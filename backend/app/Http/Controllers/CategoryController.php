@@ -14,19 +14,17 @@ class CategoryController extends Controller {
     }
     public function store(Request $request)
     {
+        $request->validate([
+        'title' => 'required',
+        ]);
         // сохраняются данные в модель и редирект на страницу со всеми постами
         $category        = new Category();
         $category->title = $request->input('title');
         $category->save();
-        $request->validate([
-            'title' => 'required',
-        ]);
-        //return redirect()->back();
         return redirect()->route('category.index');
 
     }
     public function delete($id) {
-        // удаление записи
         $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->back();
@@ -41,21 +39,16 @@ class CategoryController extends Controller {
         // изменение записи
         // со страницы edit на контроллер отправляется id поста и его данные
         // записываем все данные и переходим на главную страницу
-
-        $category         = Category::find($id);
-        $category->title  = $request->input('title');
-        $category->save();
         $request->validate([
             'title' => 'required',
         ]);
+        $category         = Category::find($id);
+        $category->title  = $request->input('title');
+        $category->save();
         return redirect()->route('category.index');
     }
     // API
     public function CategoryAllToJSON(Request $request) {
-        //$card = new Post();
-        //$card = Post::all();
-        //return view('index', compact('card'));
-
         $categories = Category::all();
         return response()->json($categories, 200);
     }
@@ -64,11 +57,9 @@ class CategoryController extends Controller {
     public function show($id)
     {
         $category = Category::find($id);
-
         if (!$category) {
             return response()->json(['error' => 'Post not found'], 404);
         }
-
         return response()->json($category, 200);
     }
 

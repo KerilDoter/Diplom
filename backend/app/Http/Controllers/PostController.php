@@ -4,6 +4,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Status;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 class PostController extends Controller {
     public function index(Request $request)
@@ -38,6 +39,11 @@ class PostController extends Controller {
 */
     public function store(Request $request)
     {
+        /* Первая версия
+        $request->validate([
+            'title' => 'required',
+        ]);
+
         // сохраняются данные в модель и редирект на страницу со всеми постами
         $card                = new Post();
         $card->title         = $request->input('title');
@@ -47,12 +53,32 @@ class PostController extends Controller {
         $card->attachment_id = $request->input('attachment_id');
         $card->status_id     = $request->input('status_id');
         $card->save();
+
+        //return redirect()->back();
+        return redirect()->route('post.index');
+        */
+        // Контроллер, где поле status_id автоматически сохраняется
         $request->validate([
             'title' => 'required',
         ]);
-        //return redirect()->back();
-        return redirect()->route('post.index');
 
+        // сохраняются данные в модель и редирект на страницу со всеми постами
+        $card                = new Post();
+        $card->title         = $request->input('title');
+        $card->description   = $request->input('description');
+        $card->content       = $request->input('content');
+        $card->category_id   = $request->input('category_id');
+        $card->attachment_id = $request->input('attachment_id');
+        $card->status_id     = $request->input('status_id');
+
+        // Получение значения для statusid из таблицы statuses по id
+        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $card->status_id = $defaultStatusId;
+        $card->save();
+
+
+
+        return redirect()->route('post.index');
     }
     public function delete($id) {
         // удаление записи
@@ -63,13 +89,18 @@ class PostController extends Controller {
     public function edit($id) {
         // по ссылке из index мы переходим с данными о посте в id
         // далее ищем этот пост и передаем его на страницу edit с постом по id
+        $categories = Category::pluck('title', 'id')->all();
+        $statuses   = Status::pluck('title', 'id')->all();
         $post = Post::find($id); // Получаем данные поста по переданному идентификатору
-        return view('edit', compact('post')); // Передаем данные поста на страницу редактирования
+        return view('edit', compact('post', 'categories', 'statuses')); // Передаем данные поста на страницу редактирования
     }
     public function update(Request $request, $id) {
         // изменение записи
         // со страницы edit на контроллер отправляется id поста и его данные
         // записываем все данные и переходим на главную страницу
+        $request->validate([
+            'title' => 'required',
+        ]);
 
         $post                = Post::find($id);
         $post->title         = $request->input('title');
@@ -79,9 +110,7 @@ class PostController extends Controller {
         $post->attachment_id = $request->input('attachment_id');
         $post->status_id     = $request->input('status_id');
         $post->save();
-        $request->validate([
-            'title' => 'required',
-        ]);
+
         return redirect()->route('post.index');
     }
     // API

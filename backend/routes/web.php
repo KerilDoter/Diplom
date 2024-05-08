@@ -20,7 +20,6 @@ Route::get('/csrf-cookie', 'App\Http\Controllers\CsrfController@getCsrfToken');
 
 // CRUD с постами
 Route::get('/', 'App\Http\Controllers\PostController@index')->name('post.index'); // перенаправляет на главную страницу
-//Route::get('/', 'App\Http\Controllers\PostController@all')->name('post.all'); // показывает все записи
 Route::post('/', 'App\Http\Controllers\PostController@store')->name('post.store'); // сохраняет данные
 Route::get('/post/create', 'App\Http\Controllers\PostController@create')->name('post.create'); // сохраняет данные
 Route::get('/post/{id}','App\Http\Controllers\PostController@show'); // показывает конкретный пост
@@ -54,8 +53,25 @@ Route::get('/status/{id}/edit', 'App\Http\Controllers\StatusController@edit')->n
 // CRUD с тегами
 Route::get('/tag', 'App\Http\Controllers\TagController@index')->name('tag.index');
 Route::post('/tag', 'App\Http\Controllers\TagController@store')->name('tag.store'); // сохраняет данные
-Route::get('/category/create', 'App\Http\Controllers\TagController@create')->name('tag.create');
+Route::get('/tag/create', 'App\Http\Controllers\TagController@create')->name('tag.create');
 Route::get('/tag/{id}','App\Http\Controllers\TagController@show'); // показывает конкретный пост
 Route::delete('/tag/{id}', 'App\Http\Controllers\TagController@delete')->name('tag.delete'); // удаление поста
 Route::put('/tag/{id}', 'App\Http\Controllers\TagController@update')->name('tag.update'); // обновление поста
 Route::get('/tag/{id}/edit', 'App\Http\Controllers\TagController@edit')->name('tag.edit');
+
+
+
+// Регистрация
+Route::get('/register', 'App\Http\Controllers\UserController@create')->name('user.register'); // показывает форму с регистрацией
+Route::get('/users', 'App\Http\Controllers\UserController@index')->name('user.index'); // показывает форму с регистрацией
+
+
+Route::get('/register/student', 'App\Http\Controllers\UserController@viewStudent')->name('register.viewStudent'); // показывает страницу с формой студента
+Route::get('/register/teacher', 'App\Http\Controllers\UserController@viewTeacher')->name('register.viewTeacher'); // показывает страницу с формой преподавателя
+
+Route::post('/register/student', 'App\Http\Controllers\UserController@storeStudent')->name('register.storeStudent'); // сохраняет данные с формы студента
+Route::post('/register/teacher', 'App\Http\Controllers\UserController@storeTeacher')->name('register.storeTeacher'); // сохраняет данные с формы преподавателя
+
+Route::put('/student/{id}', 'App\Http\Controllers\UserController@updateStudent')->name('student.update'); // обновление поста
+Route::get('/student/{id}/', 'App\Http\Controllers\UserController@LKStudent')->name('student.lk');
+Route::get('/student/{id}/edit', 'App\Http\Controllers\UserController@editStudent')->name('student.edit');

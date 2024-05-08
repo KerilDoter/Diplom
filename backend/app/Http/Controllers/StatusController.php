@@ -15,12 +15,13 @@ class StatusController extends Controller {
     public function store(Request $request)
     {
         // сохраняются данные в модель и редирект на страницу со всеми постами
-        $status        = new Status();
-        $status->title = $request->input('title');
-        $status->save();
         $request->validate([
             'title' => 'required',
         ]);
+        $status        = new Status();
+        $status->title = $request->input('title');
+        $status->save();
+
         return redirect()->route('status.index');
 
     }
@@ -35,12 +36,13 @@ class StatusController extends Controller {
         return view('statuses.edit', compact('status')); // Передаем данные поста на страницу редактирования
     }
     public function update(Request $request, $id) {
-        $status        = Status::find($id);
-        $status->title = $request->input('title');
-        $status->save();
         $request->validate([
             'title' => 'required',
         ]);
+        $status        = Status::find($id);
+        $status->title = $request->input('title');
+        $status->save();
+
         return redirect()->route('status.index');
     }
     // API

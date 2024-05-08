@@ -15,12 +15,13 @@ class TagController extends Controller {
     public function store(Request $request)
     {
         // сохраняются данные в модель и редирект на страницу со всеми постами
-        $tag               = new Tag();
-        $tag->title        = $request->input('title');
-        $tag->save();
         $request->validate([
             'title' => 'required',
         ]);
+        $tag               = new Tag();
+        $tag->title        = $request->input('title');
+        $tag->save();
+
         //return redirect()->back();
         return redirect()->route('tag.index');
 
@@ -41,13 +42,13 @@ class TagController extends Controller {
         // изменение записи
         // со страницы edit на контроллер отправляется id поста и его данные
         // записываем все данные и переходим на главную страницу
-
-        $tag        = Tag::find($id);
-        $tag->title = $request->input('title');
-        $tag->save();
         $request->validate([
             'title' => 'required',
         ]);
+        $tag        = Tag::find($id);
+        $tag->title = $request->input('title');
+        $tag->save();
+
         return redirect()->route('tag.index');
     }
     // API

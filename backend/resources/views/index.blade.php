@@ -10,25 +10,44 @@
 <body>
     <h1>Админка</h1>
     <section class="post">
+        <a href=" {{route('user.register')}}">Страница с регистрацией</a>
+        <a href=" {{route('user.index')}}">Все пользователи</a>
         <h2>Посты</h2>
-        <p>Создание поста</p>
         <p>Все посты</p>
+        <a href=" {{route('category.index')}}">Категории</a>
+        <a href=" {{route('status.index')}}">Статусы</a>
+        <a href=" {{route('tag.index')}}">Теги</a>
         <a href=" {{route('post.create')}}">Создать пост</a>
-        @foreach($posts as $post)
-            <p>Название поста: {{ $post->title }}</p>
-            <p>Краткое описание поста: {{ $post->description }}</p>
-            <p>Основное содержание: {{ $post->content }}</p>
-            <p>Категория: {{ $post->category->title }}</p>
-            <p>Вложения: {{ $post->attachment_id }}</p>
-            <p>Статус: {{ $post->status->title}}</p>
-            <!-- Кнопка для удаления записи -->
-            <form action="{{ route('post.delete', $post->id) }}" method="post">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Удалить</button>
-            </form>
-            <a href="{{ route('post.edit', $post->id) }}">Изменить</a>
-        @endforeach
+        <table>
+            <tr>
+                <th>Название поста</th>
+                <th>Краткое описание поста</th>
+                <th>Основное содержание</th>
+                <th>Категория</th>
+                <th>Вложения</th>
+                <th>Статус</th>
+                <th>Дата создания</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach($posts as $post)
+                <tr>
+                    <td>{{ $post->title }}</td>
+                    <td>{{ $post->description }}</td>
+                    <td>{{ $post->content }}</td>
+                    <td>{{ $post->category->title }}</td>
+                    <td>{{ $post->attachment_id }}</td>
+                    <td>{{ $post->status->title }}</td>
+                    <td>{{ $post->created_at }}</td>
+                    <td><form action="{{ route('post.delete', $post->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Удалить</button>
+                        </form></td>
+                    <td><a href="{{ route('post.edit', $post->id) }}">Изменить</a></td>
+                </tr>
+            @endforeach
+        </table>
         <hr>
     </section>
 </body>

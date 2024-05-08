@@ -26,20 +26,22 @@
             Содержание
             <input type="text" name="content" id="content" value="{{ $post->content }}">
         </label>
-
-        <label for="category_id">
-            Выберите категорию
-            <input type="text" name="category_id" id="category_id" value="{{ $post->category_id }}">
-        </label>
+        <label for="category_id">Выберите категорию</label>
+        <select name="category_id" id="category_id">
+            @foreach($categories as $key => $value)
+                <option value=" {{ $key }}"> {{ $value }} </option>
+            @endforeach
+        </select>
         <label for="attachment_id">
             Добавьте дополнительные файлы
             <input type="text" name="attachment_id" id="attachment_id" value="{{ $post->attachment_id }}">
         </label>
-
-        <label for="status_id">
-            Выберите статус поста
-            <input type="text" name="status_id" id="status_id" value="{{ $post->status_id }}">
-        </label>
+        <label for="status_id">Выберите статус поста</label>
+        <select name="status_id" id="status_id">
+            @foreach($statuses as $key => $value)
+                <option value=" {{ $key }}"> {{ $value }}</option>
+            @endforeach
+        </select>
         <input type="submit" value="Изменить">
     </form>
 </body>
