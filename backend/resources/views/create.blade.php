@@ -13,6 +13,9 @@
     }
 </style>
 <body>
+@if(Auth::user())
+    {{ Auth::user()->email }}
+@endif
 <form action=" {{ route('post.store') }}" method="post" >
     @csrf
     <label for="title">

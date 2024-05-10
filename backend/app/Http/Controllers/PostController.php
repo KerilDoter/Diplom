@@ -6,6 +6,7 @@ use App\Models\Status;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 class PostController extends Controller {
     public function index(Request $request)
     {
@@ -21,22 +22,6 @@ class PostController extends Controller {
         $statuses   = Status::pluck('title', 'id')->all();
         return view('create', compact('categories', 'statuses', 'posts'));
     }
-    /*
-    public function all(Request $request) {
-        // показ всех записей
-        $posts      = Post::all();
-        //$categories = Category::all();
-        $statuses   = Status::all();
-        $tags       = Tag::all();
-        return view('index',
-            [
-                'posts' => $posts,
-                //'categories'=> $categories,
-                'statuses' => $statuses,
-                'tags' => $tags,
-            ]);
-    }
-*/
     public function store(Request $request)
     {
         /* Первая версия
@@ -62,6 +47,7 @@ class PostController extends Controller {
             'title' => 'required',
         ]);
 
+        $user_id = Auth::id();
         // сохраняются данные в модель и редирект на страницу со всеми постами
         $card                = new Post();
         $card->title         = $request->input('title');
@@ -74,6 +60,7 @@ class PostController extends Controller {
         // Получение значения для statusid из таблицы statuses по id
         $defaultStatusId = 9; // id статуса "Нет модератора"
         $card->status_id = $defaultStatusId;
+        $card->user_id = $user_id;
         $card->save();
 
 
@@ -115,23 +102,23 @@ class PostController extends Controller {
     }
     // API
     public function PostAllToJSON(Request $request) {
-        //$card = new Post();
-        //$card = Post::all();
-        //return view('index', compact('card'));
-
         $posts = Post::all();
         return response()->json($posts, 200);
     }
     public function storeAll(Request $request)
     {
-        $request->validate([
-            'cardName' => 'required',
+        $card                = new Post();
+        $card->title         = $request->input('title');
+        $card->description   = $request->input('description');
+        $card->content       = $request->input('content');
+        $card->category_id   = $request->input('category_id');
+        $card->attachment_id = $request->input('attachment_id');
+        $card->status_id     = $request->input('status_id');
 
-        ]);
-
-        $card           = new Post();
-        $card->cardName = $request->input('cardName');
-        // Добавьте другие поля, если они присутствуют
+        // Получение значения для statusid из таблицы statuses по id
+        $defaultStatusId     = 9; // id статуса "Нет модератора"
+        $card->status_id     = $defaultStatusId;
+        $card->user_id       = $request->input('user_id');
         $card->save();
         return response()->json(['message' => 'Data saved successfully'], 200);
     }

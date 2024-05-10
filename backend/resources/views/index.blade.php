@@ -10,6 +10,10 @@
 <body>
     <h1>Админка</h1>
     <section class="post">
+        @if(Auth::user())
+            {{ Auth::user()->name }}
+        @endif
+
         <a href=" {{route('user.register')}}">Страница с регистрацией</a>
         <a href=" {{route('user.index')}}">Все пользователи</a>
         <h2>Посты</h2>
@@ -17,9 +21,15 @@
         <a href=" {{route('category.index')}}">Категории</a>
         <a href=" {{route('status.index')}}">Статусы</a>
         <a href=" {{route('tag.index')}}">Теги</a>
-        <a href=" {{route('post.create')}}">Создать пост</a>
+        @if( Auth::user())
+            <a href=" {{route('post.create')}}">Создать пост</a>
+        @else
+            Вы не зарегистрированы
+        @endif
+
         <table>
             <tr>
+                <th>Автор</th>
                 <th>Название поста</th>
                 <th>Краткое описание поста</th>
                 <th>Основное содержание</th>
@@ -32,6 +42,7 @@
             </tr>
             @foreach($posts as $post)
                 <tr>
+                    <td>{{ $post->user_id }}</td>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->description }}</td>
                     <td>{{ $post->content }}</td>

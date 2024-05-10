@@ -63,15 +63,33 @@ Route::get('/tag/{id}/edit', 'App\Http\Controllers\TagController@edit')->name('t
 
 // Регистрация
 Route::get('/register', 'App\Http\Controllers\UserController@create')->name('user.register'); // показывает форму с регистрацией
+
+// Авторизация
+Route::get('/login', 'App\Http\Controllers\UserController@loginForm')->name('login.create'); // показывает форму с авторизацией
+Route::post('/login', 'App\Http\Controllers\UserController@login')->name('login'); // сохраняет данные
+Route::get('/logout', 'App\Http\Controllers\UserController@logout')->name('logout'); // выходит из профиля
+
+
+
+
 Route::get('/users', 'App\Http\Controllers\UserController@index')->name('user.index'); // показывает форму с регистрацией
 
 
+
+
+// STUDENT
 Route::get('/register/student', 'App\Http\Controllers\UserController@viewStudent')->name('register.viewStudent'); // показывает страницу с формой студента
-Route::get('/register/teacher', 'App\Http\Controllers\UserController@viewTeacher')->name('register.viewTeacher'); // показывает страницу с формой преподавателя
-
 Route::post('/register/student', 'App\Http\Controllers\UserController@storeStudent')->name('register.storeStudent'); // сохраняет данные с формы студента
-Route::post('/register/teacher', 'App\Http\Controllers\UserController@storeTeacher')->name('register.storeTeacher'); // сохраняет данные с формы преподавателя
 
-Route::put('/student/{id}', 'App\Http\Controllers\UserController@updateStudent')->name('student.update'); // обновление поста
+Route::put('/student/{id}', 'App\Http\Controllers\UserController@updateStudent')->name('student.update');
 Route::get('/student/{id}/', 'App\Http\Controllers\UserController@LKStudent')->name('student.lk');
 Route::get('/student/{id}/edit', 'App\Http\Controllers\UserController@editStudent')->name('student.edit');
+
+
+// TEACHER
+Route::get('/register/teacher', 'App\Http\Controllers\UserController@viewTeacher')->name('register.viewTeacher'); // показывает страницу с формой преподавателя
+Route::post('/register/teacher', 'App\Http\Controllers\UserController@storeTeacher')->name('register.storeTeacher'); // сохраняет данные с формы преподавателя
+
+Route::put('/teacher/{id}', 'App\Http\Controllers\UserController@updateTeacher')->name('teacher.update'); // обновление поста
+Route::get('/teacher/{id}/', 'App\Http\Controllers\UserController@LKTeacher')->name('teacher.lk');
+Route::get('/teacher/{id}/edit', 'App\Http\Controllers\UserController@editTeacher')->name('teacher.edit');

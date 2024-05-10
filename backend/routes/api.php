@@ -48,3 +48,17 @@ Route::post('/tag', 'App\Http\Controllers\TagController@store')->name('tag.store
 Route::get('/tag/{id}','App\Http\Controllers\TagController@show'); // показывает конкретный пост
 Route::delete('/tag/{id}', 'App\Http\Controllers\TagController@delete')->name('tag.delete'); // удаление поста
 Route::put('/tag/{id}', 'App\Http\Controllers\TagController@update')->name('tag.update'); // обновление поста
+
+
+// Регистрация и авторизация
+
+// Студенты
+Route::post('/register/student', 'App\Http\Controllers\UserController@APIstoreStudent')->name('register.APIstoreStudent'); // сохраняет данные с формы студента
+Route::put('/student/{id}', 'App\Http\Controllers\UserController@APIupdateStudent')->name('student.APIupdate'); // обновляет данные
+
+Route::get('/users', 'App\Http\Controllers\UserController@APIindex')->name('user.APIindex'); // показ всех пользователей
+Route::get('/user/{id}', 'App\Http\Controllers\UserController@APIshow')->name('user.APIshow'); // показ одного пользователей
+// Преподавателя
+
+Route::post('/register/teacher', 'App\Http\Controllers\UserController@APIstoreTeacher')->name('register.APIstoreTeacher'); // сохраняет данные с формы преподавателя
+Route::put('/teacher/{id}', 'App\Http\Controllers\UserController@APIupdateTeacher')->name('teacher.APIupdate'); // обновление поста
