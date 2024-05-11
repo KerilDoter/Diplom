@@ -7,6 +7,8 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Firebase\JWT\JWT;
+use Tymon\JWTAuth\Facades\JWTAuth;
 class PostController extends Controller {
     public function index(Request $request)
     {
@@ -107,6 +109,7 @@ class PostController extends Controller {
     }
     public function storeAll(Request $request)
     {
+        /* первая версия
         $card                = new Post();
         $card->title         = $request->input('title');
         $card->description   = $request->input('description');
@@ -120,6 +123,46 @@ class PostController extends Controller {
         $card->status_id     = $defaultStatusId;
         $card->user_id       = $request->input('user_id');
         $card->save();
+        return response()->json(['message' => 'Data saved successfully'], 200);
+        */
+        // Проверяем наличие токена в заголовке Authorization
+        if (!$request->header('Authorization')) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Получаем токен из заголовка и декодируем его
+        /*
+        $token = substr($request->header('Authorization'), 7); // удаляем 'Bearer '
+        //$tokenData = JWT::decode($token, 'your_secret_key', ['HS256']);
+        $secret_key = 'afsafaf';
+        $headers = new \stdClass();
+        $headers->alg = 'HS256'; // укажите используемый алгоритм шифрования
+        $tokenData = JWT::decode($token, $secret_key, $headers);
+*/
+        // Создаем новую запись для данных из запроса
+        // Получение токена из заголовков запроса
+        $token = $request->header('Authorization');
+
+        // Декодирование токена и извлечение ID пользователя
+        $token_parts = explode(' ', $token);
+        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser(); // Декодируем токен и получаем пользователя
+        $user_id = $decoded_token->id; // Получаем ID пользователя
+        $card = new Post();
+        $card->title = $request->input('title');
+        $card->description = $request->input('description');
+        $card->content = $request->input('content');
+        $card->category_id = $request->input('category_id');
+        $card->attachment_id = $request->input('attachment_id');
+
+        // Получение пользователя из токена и ассоциирование с данными
+        $card->user_id = $user_id;
+
+        // Получение значения для status_id из таблицы statuses по id
+        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $card->status_id = $defaultStatusId;
+
+        $card->save();
+
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
 

@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // апи постов
 Route::get('/', 'App\Http\Controllers\PostController@PostAllToJSON')->name('PostAllToJSON'); // показывает все записи
-Route::post('/', 'App\Http\Controllers\PostController@store')->name('todo.store'); // сохраняет данные
+Route::post('/', 'App\Http\Controllers\PostController@storeAll')->name('todo.store'); // сохраняет данные
 Route::get('/post/{id}','App\Http\Controllers\PostController@show'); // показывает конкретный пост
 Route::delete('/post/{id}', 'App\Http\Controllers\PostController@delete')->name('post.delete'); // удаление поста
 Route::put('/posts/{id}', 'App\Http\Controllers\PostController@update')->name('post.update'); // обновление поста
@@ -58,7 +58,11 @@ Route::put('/student/{id}', 'App\Http\Controllers\UserController@APIupdateStuden
 
 Route::get('/users', 'App\Http\Controllers\UserController@APIindex')->name('user.APIindex'); // показ всех пользователей
 Route::get('/user/{id}', 'App\Http\Controllers\UserController@APIshow')->name('user.APIshow'); // показ одного пользователей
-// Преподавателя
+// Преподаватели
 
 Route::post('/register/teacher', 'App\Http\Controllers\UserController@APIstoreTeacher')->name('register.APIstoreTeacher'); // сохраняет данные с формы преподавателя
 Route::put('/teacher/{id}', 'App\Http\Controllers\UserController@APIupdateTeacher')->name('teacher.APIupdate'); // обновление поста
+
+Route::post('/login', 'App\Http\Controllers\UserController@APIlogin');
+Route::get('/user', 'App\Http\Controllers\UserController@APIUser');
+

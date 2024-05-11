@@ -103,7 +103,7 @@ class UserController extends Controller
     }
 
     public function APIshow($id) {
-        // показывает всех студентов
+        // показывает одного студента по id
         $users = User::find($id);
         if (!$users) {
             return response()->json(['error' => 'Post not found'], 404);
@@ -205,9 +205,7 @@ class UserController extends Controller
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
     // API
-    /*
-     * TODO: 3) сохранение, 4) обновление
-     */
+
 
     public function APIstoreTeacher(Request $request)
     {
@@ -272,4 +270,50 @@ class UserController extends Controller
         Auth::logout();
         return redirect()->route('login.create');
     }
+
+    // API авторизации
+    public function APIlogin(Request $request)
+    {
+        /* Первая версия
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+        ])) {
+            $user = Auth::user();
+            $token = $user->createToken('TokenName')->plainTextToken;
+
+            return response()->json(['token' => $token], 200);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
+        */
+        /* Вторая */
+        $credentails = $request->only(['email', 'password']);
+        if (!$token = auth('api')->attempt($credentails)) {
+            return response()->json(['error' => 'ввел данные неправильные'], 401);
+        }
+        return $this->respondWithToken($token);
+
+    }
+    public function __construct (){
+        //$this->middleware('auth:api')->except('APIlogin');
+    }
+    protected function respondWithToken($token) {
+        return response()->json([
+            'access_token' => $token,
+            'type' => 'Bearer',
+            'expires_in' => \Config::get('jwt.ttl') * 60
+        ]);
+    }
+    public function APIUser() {
+        return response()->json(auth('api')->user());
+    }
+    public function APILogout() {
+        auth('api')->logout();
+        return response()->json(['msg' => 'вы вышли']);
+    }
+    public function APIRefresh() {
+        return $this->respondWithToken(auth('api')->refresh());
+    }
 }
+
