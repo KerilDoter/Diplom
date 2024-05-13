@@ -8,13 +8,45 @@
     <title>Index</title>
 </head>
 <body>
+<style>
+    /* Table container */
+    table {
+        width: 100%;
+        display: table;
+        border-collapse: collapse;
+    }
+
+    /* Table row */
+    tr{
+        display: table-row;
+    }
+
+
+
+    /* Table cell */
+    td {
+        display: table-cell;
+        padding: 0.75rem;
+        border-bottom: 1px solid #edf2f7;
+    }
+</style>
     <h1>Админка</h1>
     <section class="post">
         @if(Auth::user())
             {{ Auth::user()->name }}
         @endif
 
-        <a href=" {{route('user.register')}}">Страница с регистрацией</a>
+
+        @if(!Auth::user())
+            <a href=" {{route('user.register')}}">Регистрация</a>
+            <a href=" {{route('login.create')}}">Авторизация</a>
+        @endif
+
+        @if(Auth::user())
+            <a href=" {{route('logout')}}">Выйти из профиля</a>
+
+        @endif
+
         <a href=" {{route('user.index')}}">Все пользователи</a>
         <h2>Посты</h2>
         <p>Все посты</p>
@@ -50,12 +82,22 @@
                     <td>{{ $post->attachment_id }}</td>
                     <td>{{ $post->status->title }}</td>
                     <td>{{ $post->created_at }}</td>
-                    <td><form action="{{ route('post.delete', $post->id) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Удалить</button>
-                        </form></td>
-                    <td><a href="{{ route('post.edit', $post->id) }}">Изменить</a></td>
+                    <td>
+                        @if(Auth::id() == $post->user_id && $post->user_id != null)
+                            <form action="{{ route('post.delete', $post->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">Удалить</button>
+                            </form>
+                        @endif
+
+                    </td>
+                    <td>
+                        @if(Auth::id() == $post->user_id && $post->user_id != null)
+                            <a href="{{ route('post.edit', $post->id) }}">Изменить</a>
+                        @endif
+
+                    </td>
                 </tr>
             @endforeach
         </table>

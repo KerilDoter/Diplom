@@ -166,6 +166,34 @@ class PostController extends Controller {
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
 
+    public function updateAll(Request $request)
+    {
+        if (!$request->header('Authorization')) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $token = $request->header('Authorization');
+
+        $token_parts = explode(' ', $token);
+        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser(); // Декодируем токен и получаем пользователя
+        $user_id = $decoded_token->id; // Получаем ID пользователя
+        $card = new Post();
+        $card->title = $request->input('title');
+        $card->description = $request->input('description');
+        $card->content = $request->input('content');
+        $card->category_id = $request->input('category_id');
+        $card->attachment_id = $request->input('attachment_id');
+
+        // Получение пользователя из токена и ассоциирование с данными
+        $card->user_id = $user_id;
+
+        // Получение значения для status_id из таблицы statuses по id
+        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $card->status_id = $defaultStatusId;
+
+        $card->save();
+
+        return response()->json(['message' => 'Data saved successfully'], 200);
+    }
     // для конкретного поста
     public function show($id)
     {
