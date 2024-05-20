@@ -1,0 +1,38 @@
+.icon{
+    margin: 0 0 10px 0;
+}
+/* .icon:first-child{
+    margin: 0 0 40px 0;
+} */
+.icon:last-child{
+    position: absolute;
+    bottom: 0px;
+}
+.list{
+    padding: 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.menu{
+    padding: 20px 0px 20px 0px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    border: 1px solid rgb(215, 216, 220);
+    border-radius: 0px 20px 20px 0px;
+    background: rgb(255, 255, 255);
+    width: 84px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.active{
+    border-radius: 12px;
+    background: rgb(239, 239, 239);
+    padding: 30px 5px 5px;
+}

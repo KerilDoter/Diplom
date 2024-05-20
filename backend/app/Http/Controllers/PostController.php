@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Category;
+use App\Models\Moderated;
 use App\Models\Post;
 use App\Models\Status;
 use App\Models\Tag;
@@ -9,14 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Firebase\JWT\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use function PHPUnit\Framework\isFalse;
+
 class PostController extends Controller {
     public function index(Request $request)
     {
-        $posts      = Post::all();
+        $users = User::all();
+        $posts = Post::all();
+
+
         //$categories = Category::pluck('title', 'id')->all();
         //$statuses   = Status::pluck('title', 'id')->all();
         // показывается главная страница
-        return view('index', compact('posts'));
+        return view('index', compact('posts', 'users'));
     }
     public function create() {
         $posts      = Post::all();
@@ -78,10 +84,16 @@ class PostController extends Controller {
     public function edit($id) {
         // по ссылке из index мы переходим с данными о посте в id
         // далее ищем этот пост и передаем его на страницу edit с постом по id
+        $moderated = Moderated::all();
+        //$moderatedUserIds = Moderated::where('post_id', $id)->pluck('user_id')->all();
+        $user = User::all();
         $categories = Category::pluck('title', 'id')->all();
         $statuses   = Status::pluck('title', 'id')->all();
+
+        //$moderated->user_id = $moderated->user->surname;
+        //$post->user_id = $post->user->surname . ' ' . $post->user->name;
         $post = Post::find($id); // Получаем данные поста по переданному идентификатору
-        return view('edit', compact('post', 'categories', 'statuses')); // Передаем данные поста на страницу редактирования
+        return view('edit', compact('post', 'categories', 'statuses', 'moderated', 'user')); // Передаем данные поста на страницу редактирования
     }
     public function update(Request $request, $id) {
         // изменение записи
@@ -104,10 +116,25 @@ class PostController extends Controller {
     }
     // API
     public function PostAllToJSON(Request $request) {
-        $posts = Post::all();
+        $posts = Post::all()->map(function ($post) {
+            if ($post->status) {
+                $post->status_id = $post->status->title;
+            } else {
+                $post->status_id = 'Unknown Status';
+            }
+
+            if ($post->user) {
+                $post->user_id = $post->user->surname . ' ' . $post->user->name;
+            } else {
+                $post->user_id = 'Unknown User';
+            }
+
+            return $post;
+        });
         return response()->json($posts, 200);
     }
-    public function storeAll(Request $request)
+
+    public function storeAllFirstVersion(Request $request)
     {
         /* первая версия
         $card                = new Post();
@@ -165,40 +192,67 @@ class PostController extends Controller {
 
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
-
+    public function storeAll(Request $request)
+    {
+        if (!$request->header('Authorization')) {
+            return response()->json(['error' => 'Не авторизован'], 401);
+        }
+        try {
+            $token = $request->header('Authorization');
+            $token_parts = explode(' ', $token);
+            $decoded_token = JWTAuth::setToken($token_parts[1])->toUser();
+            $user_id = $decoded_token->id;
+            $card = new Post();
+            $card->title = $request->input('title');
+            $card->description = $request->input('description');
+            $card->content = $request->input('content');
+            $card->category_id = $request->input('category_id');
+            $card->attachment_id = $request->input('attachment_id');
+            $card->user_id = $user_id;
+            $defaultStatusId = 9;
+            $card->status_id = $defaultStatusId;
+            $card->save();
+            return response()->json(['message' => 'Данные успешно сохранены'], 200);
+        } catch (\Exception $e) {
+            Log::error('Ошибка при сохранении данных: ' . $e->getMessage());
+            return response()->json(['error' => 'Ошибка сервера'], 500);
+        }
+    }
     public function updateAll(Request $request)
     {
         if (!$request->header('Authorization')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         $token = $request->header('Authorization');
-
         $token_parts = explode(' ', $token);
-        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser(); // Декодируем токен и получаем пользователя
-        $user_id = $decoded_token->id; // Получаем ID пользователя
+        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser();
+        $user_id = $decoded_token->id;
         $card = new Post();
         $card->title = $request->input('title');
         $card->description = $request->input('description');
         $card->content = $request->input('content');
         $card->category_id = $request->input('category_id');
         $card->attachment_id = $request->input('attachment_id');
-
-        // Получение пользователя из токена и ассоциирование с данными
         $card->user_id = $user_id;
-
-        // Получение значения для status_id из таблицы statuses по id
-        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $defaultStatusId = 9;
         $card->status_id = $defaultStatusId;
-
         $card->save();
-
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
     // для конкретного поста
     public function show($id)
     {
         $post = Post::find($id);
-
+        if ($post->status) {
+            $post->status_id = $post->status->title;
+        } else {
+            $post->status_id = 'Unknown Status';
+        }
+        if ($post->user) {
+            $post->user_id = $post->user->surname . ' ' . $post->user->name;
+        } else {
+            $post->user_id = 'Unknown User';
+        }
         if (!$post) {
             return response()->json(['error' => 'Post not found'], 404);
         }
@@ -210,18 +264,16 @@ class PostController extends Controller {
     public function getPostCount()
     {
         $posts = Post::count();
-
         if($posts=== 0) {
             return response()->json(['posts' => 0]);
         }
-
         return response()->json(['posts' => $posts]);
     }
 
     // количество постов со статусом на модерации
     public function getPostsInModeration()
     {
-        $postsInModerationCount = Post::where('status', 'на модерации')->count();
+        $postsInModerationCount = Post::where('is_moderated', '0')->count();
 
         return response()->json(['posts_in_moderation' => $postsInModerationCount]);
     }
@@ -229,7 +281,7 @@ class PostController extends Controller {
     // количество постов со статусом готово
     public function getReadyPosts()
     {
-        $readyPostsCount = Post::where('status', 'готово')->count();
+        $readyPostsCount = Post::where('status_id', '6')->count();
 
         return response()->json(['ready_posts' => $readyPostsCount]);
     }

@@ -1,0 +1,12 @@
+.content {
+    max-width: 1300px;
+    margin-left: 100px;
+    padding: 5px 35px;
+}
+.h2{
+    color: rgb(10, 9, 11);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 120%;
+    margin: 0 0 58px -20px;
+}

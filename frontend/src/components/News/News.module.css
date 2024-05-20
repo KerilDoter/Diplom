@@ -1,0 +1,56 @@
+.heading{
+    display: flex;
+    align-items: center;
+}
+.h1{
+    color: rgb(10, 9, 11);
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 120%;
+}
+.count{
+    color: rgb(17, 59, 152);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    border-radius: 5px;
+    background: rgb(235, 240, 251);
+    padding: 4px 5px;
+    margin: 0 0 0 12px;
+}
+.news{
+    margin: 48px 0 0 0;
+    padding: 20px;
+
+}
+.text{
+    color: rgb(10, 9, 11);
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 16px;
+    letter-spacing: -0.02px;
+}
+.table {
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.text:first-child{
+    width: 370px;
+    margin: 0 32px 0 0;
+
+}
+.text:nth-child(2){
+    width: 140px;
+}
+.text:nth-child(3){
+    width: 337px;
+    margin: 0 24px 0 0;
+}
+.text:nth-child(4){
+    width: 390px;
+}
+.border{
+    border-bottom: 1px solid rgb(241, 241, 241);;
+}

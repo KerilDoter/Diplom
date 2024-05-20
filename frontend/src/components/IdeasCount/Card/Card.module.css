@@ -1,0 +1,46 @@
+.top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.botText{
+    display: flex;
+    align-items: center;
+    background: rgb(235, 251, 241);
+    border-radius: 5px;
+    padding: 2px;
+}
+.bot{
+    display: flex;
+    align-items: center;
+}
+.card{
+    max-width: 343px;
+    flex: 33%;
+}
+.heading{
+    color: rgb(18, 18, 19);
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 22px;
+}
+.count{
+    color: rgba(25, 28, 48, 0.9);
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 40px;
+    margin: 24px 0 0 0;
+}
+.lastMouth{
+    color: rgb(132, 136, 152);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    margin: 0 12px 0 0;
+}
+.countMouth{
+    color: rgb(1, 102, 38);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+}

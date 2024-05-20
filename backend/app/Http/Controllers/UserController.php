@@ -91,24 +91,50 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('student.lk', $user);
     }
+    public function makeAdmin(User $user)
+    {
+        // Запретить изменение, если пользователь не администратор
+        if (!Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'У вас нет прав для выполнения этого действия');
+        }
+
+        $user->is_admin = 1;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Пользователь успешно назначен администратором');
+    }
+
+    public function destroyAdmin(User $user)
+    {
+        // Запретить изменение, если пользователь не администратор
+        if (!Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'У вас нет прав для выполнения этого действия');
+        }
+
+        $user->is_admin = 0;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Пользователь успешно назначен администратором');
+    }
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->back()->with('success', 'Пользователь успешно удален');
+    }
     // API
     public function APIindex() {
-        // показывает всех студентов
         $users = User::all();
         if (!$users) {
             return response()->json(['error' => 'Post not found'], 404);
         }
-
         return response()->json($users, 200);
     }
 
     public function APIshow($id) {
-        // показывает одного студента по id
         $users = User::find($id);
         if (!$users) {
             return response()->json(['error' => 'Post not found'], 404);
         }
-
         return response()->json($users, 200);
     }
     public function APIstoreStudent(Request $request)
@@ -122,9 +148,8 @@ class UserController extends Controller
         $user->group = $request->input('group');
         $user->rule_id = 2; // По умолчанию rule_id равен 2
         $user->save();
-
-
         return response()->json(['message' => 'Data saved successfully'], 200);
+
     }
 
     public function APIupdateStudent(Request $request, $id) {
@@ -170,7 +195,7 @@ class UserController extends Controller
         $user->save();
 
         Auth::login($user);
-        return redirect()->route('teacher.lk');
+        return redirect()->route('user.index');
     }
     public function LKTeacher($id) {
 
@@ -220,8 +245,8 @@ class UserController extends Controller
         $user->rule_id = 1; // По умолчанию rule_id равен 2
         $user->save();
 
-
         return response()->json(['message' => 'Data saved successfully'], 200);
+
     }
 
     public function APIupdateTeacher(Request $request, $id) {
@@ -274,39 +299,41 @@ class UserController extends Controller
     // API авторизации
     public function APIlogin(Request $request)
     {
-        /* Первая версия
-        if (Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-        ])) {
-            $user = Auth::user();
-            $token = $user->createToken('TokenName')->plainTextToken;
-
-            return response()->json(['token' => $token], 200);
+        $credentials = $request->only(['email', 'password']);
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'ввели неверные данные'], 401);
         }
-
-        return response()->json(['error' => 'Unauthorized'], 401);
-        */
-        /* Вторая */
-        $credentails = $request->only(['email', 'password']);
-        if (!$token = auth('api')->attempt($credentails)) {
-            return response()->json(['error' => 'ввел данные неправильные'], 401);
-        }
+        $user = auth('api')->user();
+        $userData = [
+            'id' => $user->id,
+            'email' => $user->email,
+            'surname' => $user->surname,
+            'name' => $user->name,
+            'patronymic' => $user->patronymic,
+            'department' => $user->department,
+            'position'=> $user->position,
+            'phone' => $user->phone,
+            'work_phone' => $user->work_phone,
+            'telegram' => $user->telegram,
+            'vk' => $user->vk,
+            'rule_id' => $user->rule_id,
+        ];
+        $token = auth('api')->claims(['user' => $userData])->attempt($credentials);
         return $this->respondWithToken($token);
+    }
 
-    }
-    public function __construct (){
-        //$this->middleware('auth:api')->except('APIlogin');
-    }
     protected function respondWithToken($token) {
         return response()->json([
             'access_token' => $token,
             'type' => 'Bearer',
-            'expires_in' => \Config::get('jwt.ttl') * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
-    public function APIUser() {
-        return response()->json(auth('api')->user());
+    public function __construct (){
+        //$this->middleware('auth:api')->except('APIlogin');
+    }
+    public function APIUser(Request $request) {
+        return response()->json($request->user());
     }
     public function APILogout() {
         auth('api')->logout();

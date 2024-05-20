@@ -6,33 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
             $table->string('surname');
             $table->string('patronymic');
-            $table->string('department')->nullable(); // кафедра
-            $table->string('position')->nullable(); // должность
+            $table->string('department')->nullable();
+            $table->string('position')->nullable();
             $table->string('phone')->nullable();
             $table->string('work_phone')->nullable();
             $table->string('telegram')->nullable();
             $table->string('vk')->nullable();
-            $table->integer('rule_id')->nullable(); // роль (студент, преподаватель, модератор)
-            $table->tinyInteger('is_admin')->default(0); // администратор или нет
-            $table->string('about')->nullable(); // информация о себе
-            $table->integer('skills_id')->nullable(); // скиллы (программист, дизайнер)
-            $table->string('group')->nullable(); //группа ИТ
+            $table->integer('rule_id')->nullable();
+            $table->tinyInteger('is_admin')->default(0);
+            $table->string('about')->nullable();
+            $table->integer('skills_id')->nullable();
+            $table->string('group')->nullable();
 
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {

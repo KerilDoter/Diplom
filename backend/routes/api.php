@@ -27,6 +27,11 @@ Route::put('/posts/{id}', 'App\Http\Controllers\PostController@update')->name('p
 
 
 Route::get('/count', 'App\Http\Controllers\PostController@getPostCount'); // показывает количество записей
+Route::get('/post_moderation', 'App\Http\Controllers\PostController@getPostsInModeration'); // показывает количество записей
+Route::get('/post_get_ready', 'App\Http\Controllers\PostController@getReadyPosts'); // показывает количество записей
+
+
+
 // апи категорий
 Route::get('/category', 'App\Http\Controllers\CategoryController@CategoryAllToJSON')->name('CategoryAllToJSON'); // показывает все записи
 Route::post('/category', 'App\Http\Controllers\CategoryController@store')->name('category.store'); // сохраняет данные

@@ -9,6 +9,8 @@
 </head>
 <body>
     <h1>Изменение поста</h1>
+
+
     <form action="{{ route('post.update', $post->id) }}" method="post">
         @csrf
         @method('PUT')
@@ -43,6 +45,20 @@
             @endforeach
         </select>
         <input type="submit" value="Изменить">
+
     </form>
+    @if($post->user_id != Auth::id() && Auth::user()->rule_id == 1)
+        @if(!$post->is_moderated)
+            <form action="{{ route('moderator.store', $post->id) }}" method="post">
+                @csrf
+                <input type="submit" value="Взять кураторство">
+            </form>
+        @else
+            Куратор
+        @endif
+    @else
+        У вас прав взять пост под кураторство
+    @endif
+
 </body>
 </html>

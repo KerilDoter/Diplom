@@ -1,21 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
 body {
-  margin: 0;
-  font-family: 'Ubuntu', sans-serif;
-  background-color: #FFFFF3;
-  padding: 0;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /*background: #F3F5FA;*/
 }
-.container{
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-h2, li, p{
-  margin: 0;
-  padding: 0;
-}
-ul{
-  list-style: none;
-  padding: 0;
 
+p {
+    margin: 0;
+    padding: 0;
+}
+
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+.react-tabs__tab--selected{
+    border-bottom: 2px solid rgb(23, 81, 208) !important;
 }

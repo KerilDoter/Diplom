@@ -28,7 +28,7 @@ Route::put('/post/{id}', 'App\Http\Controllers\PostController@update')->name('po
 //Route::get('/', 'App\Http\Controllers\PostController@edit')->name('post.edit'); // перенаправляет на страницу с изменением поста
 Route::get('/post/{id}/edit', 'App\Http\Controllers\PostController@edit')->name('post.edit');
 
-
+Route::post('/post/{id}/moderated', 'App\Http\Controllers\ModeratedController@store')->name('moderator.store'); // сохраняет данные
 Route::get('/count', 'App\Http\Controllers\PostController@getPostCount'); // показывает количество записей
 
 // CRUD с категориями
@@ -73,10 +73,11 @@ Route::get('/logout', 'App\Http\Controllers\UserController@logout')->name('logou
 
 
 Route::get('/users', 'App\Http\Controllers\UserController@index')->name('user.index'); // показывает форму с регистрацией
+Route::delete('/users/{user}', 'App\Http\Controllers\UserController@destroy')->name('user.destroy');
+Route::post('/users/{user}/makeAdmin', 'App\Http\Controllers\UserController@makeAdmin')->name('user.makeAdmin');
 
 
-
-
+Route::post('/users/{user}/destroyAdmin', 'App\Http\Controllers\UserController@makeAdmin')->name('user.destroyAdmin');
 // STUDENT
 Route::get('/register/student', 'App\Http\Controllers\UserController@viewStudent')->name('register.viewStudent'); // показывает страницу с формой студента
 Route::post('/register/student', 'App\Http\Controllers\UserController@storeStudent')->name('register.storeStudent'); // сохраняет данные с формы студента

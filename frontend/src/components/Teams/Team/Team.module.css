@@ -1,0 +1,79 @@
+.btn{
+    display: flex;
+    border-radius: 6px;
+    background: rgb(23, 81, 208);
+    padding: 10px 15px;
+    max-width: 120px;
+    align-items: center;
+    justify-content: center;
+}
+.name{
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.05px;
+}
+.header{
+    color: rgb(10, 9, 11);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    margin: 0 0 10px 0;
+}
+.desc{
+    color: rgb(10, 9, 11);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0 0 10px 0;
+}
+.block1{
+    max-width: 438px;
+}
+.text{
+    color: rgb(10, 9, 11);
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 16px;
+    letter-spacing: -0.02px;
+    width: 320px;
+}
+.table {
+    padding: 12px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+
+.border{
+    border-bottom: 1px solid rgb(241, 241, 241);;
+}
+.blocks{
+    display: flex;
+    justify-content: space-between;
+}
+.footInfo{
+    display: flex;
+    align-items: center;
+    width: 320px;
+}
+.image{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin: 0 8px 0 0;
+}
+.topText{
+    color: rgb(10, 9, 11);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+}
+.botText{
+    color: rgb(132, 136, 152);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+}
