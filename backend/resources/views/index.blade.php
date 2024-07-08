@@ -47,7 +47,7 @@
                         <th >Краткое описание поста</th>
                         <th >Основное содержание</th>
                         <th >Категория</th>
-                        <th >Вложения</th>
+
                         <th >Статус</th>
                         <th >Дата создания</th>
                         <th ></th>
@@ -60,7 +60,7 @@
                             <td>{{ $post->description }}</td>
                             <td>{{ $post->content }}</td>
                             <td>{{ $post->category->title }}</td>
-                            <td>{{ $post->attachment_id }}</td>
+
                             <td>{{ $post->status->title }}</td>
                             <td>{{ $post->created_at }}</td>
                             <td>

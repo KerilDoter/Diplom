@@ -1,0 +1,6 @@
+backend
+cd в папку
+php artisan serve
+
+frontend
+npm start

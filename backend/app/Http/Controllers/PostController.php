@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use function PHPUnit\Framework\isFalse;
 
@@ -17,46 +18,21 @@ class PostController extends Controller {
     {
         $users = User::all();
         $posts = Post::all();
-
-
-        //$categories = Category::pluck('title', 'id')->all();
-        //$statuses   = Status::pluck('title', 'id')->all();
-        // показывается главная страница
         return view('index', compact('posts', 'users'));
     }
     public function create() {
         $posts      = Post::all();
         $categories = Category::pluck('title', 'id')->all();
         $statuses   = Status::pluck('title', 'id')->all();
-        return view('create', compact('categories', 'statuses', 'posts'));
+        return view('create',
+            compact('categories', 'statuses', 'posts'));
     }
     public function store(Request $request)
     {
-        /* Первая версия
         $request->validate([
             'title' => 'required',
         ]);
-
-        // сохраняются данные в модель и редирект на страницу со всеми постами
-        $card                = new Post();
-        $card->title         = $request->input('title');
-        $card->description   = $request->input('description');
-        $card->content       = $request->input('content');
-        $card->category_id   = $request->input('category_id');
-        $card->attachment_id = $request->input('attachment_id');
-        $card->status_id     = $request->input('status_id');
-        $card->save();
-
-        //return redirect()->back();
-        return redirect()->route('post.index');
-        */
-        // Контроллер, где поле status_id автоматически сохраняется
-        $request->validate([
-            'title' => 'required',
-        ]);
-
         $user_id = Auth::id();
-        // сохраняются данные в модель и редирект на страницу со всеми постами
         $card                = new Post();
         $card->title         = $request->input('title');
         $card->description   = $request->input('description');
@@ -64,15 +40,10 @@ class PostController extends Controller {
         $card->category_id   = $request->input('category_id');
         $card->attachment_id = $request->input('attachment_id');
         $card->status_id     = $request->input('status_id');
-
-        // Получение значения для statusid из таблицы statuses по id
-        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $defaultStatusId = 9;
         $card->status_id = $defaultStatusId;
         $card->user_id = $user_id;
         $card->save();
-
-
-
         return redirect()->route('post.index');
     }
     public function delete($id) {
@@ -82,27 +53,23 @@ class PostController extends Controller {
         return redirect()->back();
     }
     public function edit($id) {
-        // по ссылке из index мы переходим с данными о посте в id
-        // далее ищем этот пост и передаем его на страницу edit с постом по id
         $moderated = Moderated::all();
-        //$moderatedUserIds = Moderated::where('post_id', $id)->pluck('user_id')->all();
         $user = User::all();
         $categories = Category::pluck('title', 'id')->all();
-        $statuses   = Status::pluck('title', 'id')->all();
-
-        //$moderated->user_id = $moderated->user->surname;
-        //$post->user_id = $post->user->surname . ' ' . $post->user->name;
-        $post = Post::find($id); // Получаем данные поста по переданному идентификатору
-        return view('edit', compact('post', 'categories', 'statuses', 'moderated', 'user')); // Передаем данные поста на страницу редактирования
+        $statuses = Status::pluck('title', 'id')->all();
+        $post = Post::find($id);
+        return view('edit',
+            compact('post',
+                'categories',
+                'statuses',
+                'moderated',
+                'user'));
     }
     public function update(Request $request, $id) {
-        // изменение записи
-        // со страницы edit на контроллер отправляется id поста и его данные
-        // записываем все данные и переходим на главную страницу
+
         $request->validate([
             'title' => 'required',
         ]);
-
         $post                = Post::find($id);
         $post->title         = $request->input('title');
         $post->description   = $request->input('description');
@@ -111,7 +78,6 @@ class PostController extends Controller {
         $post->attachment_id = $request->input('attachment_id');
         $post->status_id     = $request->input('status_id');
         $post->save();
-
         return redirect()->route('post.index');
     }
     // API
@@ -136,60 +102,23 @@ class PostController extends Controller {
 
     public function storeAllFirstVersion(Request $request)
     {
-        /* первая версия
-        $card                = new Post();
-        $card->title         = $request->input('title');
-        $card->description   = $request->input('description');
-        $card->content       = $request->input('content');
-        $card->category_id   = $request->input('category_id');
-        $card->attachment_id = $request->input('attachment_id');
-        $card->status_id     = $request->input('status_id');
-
-        // Получение значения для statusid из таблицы statuses по id
-        $defaultStatusId     = 9; // id статуса "Нет модератора"
-        $card->status_id     = $defaultStatusId;
-        $card->user_id       = $request->input('user_id');
-        $card->save();
-        return response()->json(['message' => 'Data saved successfully'], 200);
-        */
-        // Проверяем наличие токена в заголовке Authorization
         if (!$request->header('Authorization')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        // Получаем токен из заголовка и декодируем его
-        /*
-        $token = substr($request->header('Authorization'), 7); // удаляем 'Bearer '
-        //$tokenData = JWT::decode($token, 'your_secret_key', ['HS256']);
-        $secret_key = 'afsafaf';
-        $headers = new \stdClass();
-        $headers->alg = 'HS256'; // укажите используемый алгоритм шифрования
-        $tokenData = JWT::decode($token, $secret_key, $headers);
-*/
-        // Создаем новую запись для данных из запроса
-        // Получение токена из заголовков запроса
         $token = $request->header('Authorization');
-
-        // Декодирование токена и извлечение ID пользователя
         $token_parts = explode(' ', $token);
-        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser(); // Декодируем токен и получаем пользователя
-        $user_id = $decoded_token->id; // Получаем ID пользователя
+        $decoded_token = JWTAuth::setToken($token_parts[1])->toUser();
+        $user_id = $decoded_token->id;
         $card = new Post();
         $card->title = $request->input('title');
         $card->description = $request->input('description');
         $card->content = $request->input('content');
         $card->category_id = $request->input('category_id');
         $card->attachment_id = $request->input('attachment_id');
-
-        // Получение пользователя из токена и ассоциирование с данными
         $card->user_id = $user_id;
-
-        // Получение значения для status_id из таблицы statuses по id
-        $defaultStatusId = 9; // id статуса "Нет модератора"
+        $defaultStatusId = 9;
         $card->status_id = $defaultStatusId;
-
         $card->save();
-
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
     public function storeAll(Request $request)
@@ -239,7 +168,6 @@ class PostController extends Controller {
         $card->save();
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
-    // для конкретного поста
     public function show($id)
     {
         $post = Post::find($id);
@@ -256,11 +184,8 @@ class PostController extends Controller {
         if (!$post) {
             return response()->json(['error' => 'Post not found'], 404);
         }
-
         return response()->json($post, 200);
     }
-
-    // количество постов
     public function getPostCount()
     {
         $posts = Post::count();
@@ -269,16 +194,12 @@ class PostController extends Controller {
         }
         return response()->json(['posts' => $posts]);
     }
-
-    // количество постов со статусом на модерации
     public function getPostsInModeration()
     {
         $postsInModerationCount = Post::where('is_moderated', '0')->count();
 
         return response()->json(['posts_in_moderation' => $postsInModerationCount]);
     }
-
-    // количество постов со статусом готово
     public function getReadyPosts()
     {
         $readyPostsCount = Post::where('status_id', '6')->count();

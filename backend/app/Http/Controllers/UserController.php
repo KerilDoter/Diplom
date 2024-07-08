@@ -9,15 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    //
     public function index() {
-        // показывает всех студентов
         $users = User::all();
         return view('user.index', compact('users'));
     }
     public function create()
     {
-        // страница с регистрацией для студента и преподавателя
         return view('user.register');
     }
 
@@ -71,9 +68,6 @@ class UserController extends Controller
     }
 
     public function updateStudent(Request $request, $id) {
-        // изменение записи
-        // со страницы edit на контроллер отправляется id поста и его данные
-        // записываем все данные и переходим на главную страницу
         $user             = User::find($id);
         $user->email      = $request->input('email');
         $user->password   = bcrypt($request->input('password'));
@@ -93,7 +87,6 @@ class UserController extends Controller
     }
     public function makeAdmin(User $user)
     {
-        // Запретить изменение, если пользователь не администратор
         if (!Auth::user()->is_admin) {
             return redirect()->back()->with('error', 'У вас нет прав для выполнения этого действия');
         }
@@ -106,7 +99,6 @@ class UserController extends Controller
 
     public function destroyAdmin(User $user)
     {
-        // Запретить изменение, если пользователь не администратор
         if (!Auth::user()->is_admin) {
             return redirect()->back()->with('error', 'У вас нет прав для выполнения этого действия');
         }
@@ -153,9 +145,6 @@ class UserController extends Controller
     }
 
     public function APIupdateStudent(Request $request, $id) {
-        // изменение записи
-        // со страницы edit на контроллер отправляется id поста и его данные
-        // записываем все данные и переходим на главную страницу
         $user             = User::find($id);
         $user->email      = $request->input('email');
         $user->password   = bcrypt($request->input('password'));
@@ -169,14 +158,9 @@ class UserController extends Controller
         $user->vk         = $request->input('vk');
         $user->about      = $request->input('about');
         $user->skills_id  = $request->input('skills_id');
-        //$user->rule_id       = 1; // По умолчанию rule_id равен 2
         $user->save();
         return redirect()->route('student.lk', $user);
     }
-    // END STUDENT
-
-
-    // TEACHER
 
     public function viewTeacher() {
         return view('user.teachers.create');
@@ -193,20 +177,19 @@ class UserController extends Controller
         $user->position = $request->input('position');
         $user->rule_id = 1; // По умолчанию rule_id равен 2
         $user->save();
-
         Auth::login($user);
         return redirect()->route('user.index');
     }
     public function LKTeacher($id) {
 
-        $user = User::find($id); // Получаем id студента
-        return view('user.teachers.index', compact('user')); // Передаем данные поста на страницу редактирования
+        $user = User::find($id);
+        return view('user.teachers.index', compact('user'));
     }
 
     public function editTeacher($id) {
 
-        $user = User::find($id); // Получаем id студента
-        return view('user.teachers.index', compact('user')); // Передаем данные поста на страницу редактирования
+        $user = User::find($id);
+        return view('user.teachers.index', compact('user'));
     }
 
 
@@ -225,7 +208,6 @@ class UserController extends Controller
         $user->vk         = $request->input('vk');
         $user->about      = $request->input('about');
         $user->skills_id  = $request->input('skills_id');
-        //$user->rule_id       = 1; // По умолчанию rule_id равен 2
         $user->save();
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
@@ -244,15 +226,11 @@ class UserController extends Controller
         $user->position = $request->input('position');
         $user->rule_id = 1; // По умолчанию rule_id равен 2
         $user->save();
-
         return response()->json(['message' => 'Data saved successfully'], 200);
 
     }
 
     public function APIupdateTeacher(Request $request, $id) {
-        // изменение записи
-        // со страницы edit на контроллер отправляется id поста и его данные
-        // записываем все данные и переходим на главную страницу
         $user             = User::find($id);
         $user->email      = $request->input('email');
         $user->password   = bcrypt($request->input('password'));
@@ -267,7 +245,6 @@ class UserController extends Controller
         $user->vk         = $request->input('vk');
         $user->about      = $request->input('about');
         $user->skills_id  = $request->input('skills_id');
-        //$user->rule_id       = 1; // По умолчанию rule_id равен 2
         $user->save();
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
@@ -296,7 +273,6 @@ class UserController extends Controller
         return redirect()->route('login.create');
     }
 
-    // API авторизации
     public function APIlogin(Request $request)
     {
         $credentials = $request->only(['email', 'password']);

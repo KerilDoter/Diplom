@@ -48,7 +48,7 @@ export const Idea = () => {
                         </svg>
                     </Link>
                 </div>
-                {idea && (<h2 className={styles.heading}>Идея № {idea.id}</h2>)}
+                {idea && (<h2 className={styles.heading}>Идея - {idea.title}</h2>)}
             </div>
             <div>
                 <div className={styles.card}>

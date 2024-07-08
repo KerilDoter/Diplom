@@ -14,16 +14,13 @@ class StatusController extends Controller {
     }
     public function store(Request $request)
     {
-        // сохраняются данные в модель и редирект на страницу со всеми постами
         $request->validate([
             'title' => 'required',
         ]);
         $status        = new Status();
         $status->title = $request->input('title');
         $status->save();
-
         return redirect()->route('status.index');
-
     }
     public function delete($id) {
         // удаление записи
@@ -32,8 +29,8 @@ class StatusController extends Controller {
         return redirect()->back();
     }
     public function edit($id) {
-        $status = Status::find($id); // Получаем данные поста по переданному идентификатору
-        return view('statuses.edit', compact('status')); // Передаем данные поста на страницу редактирования
+        $status = Status::find($id);
+        return view('statuses.edit', compact('status'));
     }
     public function update(Request $request, $id) {
         $request->validate([
@@ -45,13 +42,10 @@ class StatusController extends Controller {
 
         return redirect()->route('status.index');
     }
-    // API
     public function StatusAllToJSON(Request $request) {
         $statuses = Status::all();
         return response()->json($statuses, 200);
     }
-
-    // для конкретного поста
     public function show($id)
     {
         $status = Status::find($id);
@@ -59,7 +53,6 @@ class StatusController extends Controller {
         if (!$status) {
             return response()->json(['error' => 'Post not found'], 404);
         }
-
         return response()->json($status, 200);
     }
 

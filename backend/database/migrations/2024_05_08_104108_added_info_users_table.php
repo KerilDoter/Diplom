@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('about')->nullable();
             $table->integer('skills_id')->nullable();
             $table->string('group')->nullable();
-
         });
     }
     public function down(): void

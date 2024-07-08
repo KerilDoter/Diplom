@@ -17,7 +17,6 @@ class CategoryController extends Controller {
         $request->validate([
         'title' => 'required',
         ]);
-        // сохраняются данные в модель и редирект на страницу со всеми постами
         $category        = new Category();
         $category->title = $request->input('title');
         $category->save();
@@ -30,15 +29,10 @@ class CategoryController extends Controller {
         return redirect()->back();
     }
     public function edit($id) {
-        // по ссылке из index мы переходим с данными о посте в id
-        // далее ищем этот пост и передаем его на страницу edit с постом по id
-        $category = Category::find($id); // Получаем данные поста по переданному идентификатору
-        return view('categories.edit', compact('category')); // Передаем данные поста на страницу редактирования
+        $category = Category::find($id);
+        return view('categories.edit', compact('category'));
     }
     public function update(Request $request, $id) {
-        // изменение записи
-        // со страницы edit на контроллер отправляется id поста и его данные
-        // записываем все данные и переходим на главную страницу
         $request->validate([
             'title' => 'required',
         ]);
@@ -53,7 +47,6 @@ class CategoryController extends Controller {
         return response()->json($categories, 200);
     }
 
-    // для конкретного поста
     public function show($id)
     {
         $category = Category::find($id);
@@ -62,5 +55,4 @@ class CategoryController extends Controller {
         }
         return response()->json($category, 200);
     }
-
 }
